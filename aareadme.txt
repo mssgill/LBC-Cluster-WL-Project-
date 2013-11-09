@@ -83,7 +83,17 @@ made: decamtemp.sexcat  -->
 
 -- MSSG: to try to output the 4 params im3shape needs: fwhm, beta, x, y at the pos's of the galaxies, now that psfex  is working and making an interpl'd psf over the whole field from stars
 
+- Put files of first successful im3shape run in the repo
+
+- email to JoeZ about what's going on with the x and y posns
+
+- try to get Erin Sheldon psfex code from github running
+
 -- JCY: to check pos of stars from the im3shape output file, figure
    out if they are RA/DEC even though they say 20.xxxx, 20.xxxx
 
-Next G+H: Fri Nov 8, 12.30pm PST
+- work with Daniel on photoz's of the Max8 cluster
+
+
+
+Next GH: Mon Nov 11, 12.30pm PST
