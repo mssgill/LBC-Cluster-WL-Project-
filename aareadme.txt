@@ -1,4 +1,3 @@
-
 # Main Readme for the LBC Cluster WL project
 
 # MSSG, JCY, and JM (Josh Meyers)
