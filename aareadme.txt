@@ -7,12 +7,19 @@
 ################## To get git repo set up, and then use it
 
 edit and add a .gitignore file
+
+# Connect repo to remote one on github:
 git remote add origin https://github.com/mssgill/LBC-Cluster-WL-Project-.git
+
+# Add some files
 git add [several file names]
+
 git commit                 # To actually commit to repo
+
+# Put them into remote repo
 git push -u origin master  # This requires username + passwd on git
 
---> Note that this will make an original git repo in the current dir, whatever you named it on github
+--> Note that this will make an original git repo in the current dir, with whatever you named it on github
 
 ### To clone from github:
 
@@ -26,36 +33,60 @@ To update, as normal, use git pull, and to check anytime the status of
 the local files vs. what was last pulled, do a git status.
 
 
-######################### Isolating stars
+######################### Using a single star as psf in an im3shape run
 
-############ Run star choosing py code to make fits file
+[Nov 20 2013]
 
-py choose_stars.py 
+---- To get im3shape working in a mode where it's using a single star
+     image as the psf (which is fine for this particular clusterstep
+     image because it's constant psf and const shr across the whole),
+     run as so from the clusterStepData dir:
+     
+python ../im3shape/bin/im3shape.py singlepsf.ini im_p4_s4_1.fits clusterStepData/im_p4_s4_1.gal.simple.cat clusterStepData/star1.fits singlepsf_output.py.txt 0 2480
 
-#### Pick ID,x,y columns of galcat
+Where:
 
-awk '{print $1 , $6 , $7;}' im_p4_s4_1.gal.cat > im_p4_s4_1.gal.simple.cat
+--- singlepsf.ini is a modified ini param file where the position of
+the star and its pixel extent has been changed, and the padding param
+too (i think).
 
-#### Line to change in ini file to use fits file for psf
+Also needed to alter line in file to use fits file for psf:
 
-psf_input = psf_image_single
+  psf_input = psf_image_single
 
-#### Syntax to run cmd
+--- im_p4_s4_1.fits is the orig fits file 
+
+--- im_p4_s4_1.gal.simple.cat is a straight gal catalog with just the
+  IDs,x,y of the galaxies in it and nothing else (this was
+  simplified down from an ascii gal cat that Julia passed on to me),
+  Used: 
+    awk '{print $1 , $6 , $7;}' im_p4_s4_1.gal.cat > im_p4_s4_1.gal.simple.cat
+  it's currently in the clusterStepData dir
+
+--- star1.fits is a fits table file of the first star from the star
+  cat, which was written out using choose_star.py (just: py
+  choose_stars.py)
+
+  it's currently in the clusterStepData dir also.
+
+
+- singlepsf_output.py.txt is the file we want to write to
+
+- The numbers 0 2480 are the objects we want to run over (to do a
+  test, just change to e.g. 1 5 )
  
-python ../../im3shape/bin/im3shape.py single_psf.ini im_p4_s4_1.fits im_p4_s4_1.gal.simple.cat star1.fits single_starpsf_output.py.txt 1 5
 
-
-################## Getting psfex working
+################## Getting psfex working to make .psf file for im3shape input
 
 --- Start by getting needed files locally:
 
-cp ~/imcat/sextfilesForDES/* .
+ cp ~/imcat/sextfilesForDES/* .
 
-cp decam.sex psfex.sex
+ cp decam.sex psfex.sex
 
---- Ran the starpos.py code 
+--- Run the starpos.py code to put out the x,y of all stars
 
---- Altered psfex.sex file thusly:
+--- Alter psfex.sex file thusly:
 
 CATALOG_TYPE    FITS_LDAC	
 
@@ -66,16 +97,15 @@ ASSOC_TYPE         NEAREST
 ASSOCSELEC_TYPE    MATCHED
 
 
---- Added to psfex.params
+--- Add to psfex.params:
 
-NUMBER_ASSOC  at the very end
+NUMBER_ASSOC  at the very end (so it doesn't output all columns, only needed ones)
 
---- Then ran:
+--- Then run:
 
 sex -c psfex.sex im_p4_s4_1.fits  
 
-
-made: decamtemp.sexcat  --> 
+  This will make: decamtemp.sexcat   
 
 
 ############################## Current:
