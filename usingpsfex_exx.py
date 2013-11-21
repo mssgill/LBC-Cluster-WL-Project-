@@ -43,7 +43,7 @@ os.system('rm staratxy.fits')
 x = 1448
 y = 15
 
-psfex =  galsim.des.DES_PSFEx('d.psf')
+psfex =  galsim.des.DES_PSFEx('decamtemp.psf')
 
 psfatgal = getPSFExarray(psfex, x, y )
 

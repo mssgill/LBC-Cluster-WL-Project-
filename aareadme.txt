@@ -2,9 +2,16 @@
 
 # MSSG, JCY, and JM (Josh Meyers)
 # start: oct 2013
-# 
+ 
 
-################## To get git repo set up, and then use it
+--------------- Contents:
+
+- git setup
+- single star im3shape run
+- psfex, then run im3shape 
+
+>>> git
+###################################### To get git repo set up, and then use it
 
 edit and add a .gitignore file
 
@@ -17,7 +24,7 @@ git add [several file names]
 git commit                 # To actually commit to repo
 
 # Put them into remote repo
-git push -u origin master  # This requires username + passwd on git
+git push -u origin master  [i.e. gpom]  # This requires username + passwd on git
 
 --> Note that this will make an original git repo in the current dir, with whatever you named it on github
 
@@ -32,7 +39,14 @@ git add, commit, and push
 To update, as normal, use git pull, and to check anytime the status of
 the local files vs. what was last pulled, do a git status.
 
+### In future commits:
 
+-- Only need to do the following:
+
+git commit
+gpom
+
+>>> single
 ######################### Using a single star as psf in an im3shape run
 
 [Nov 20 2013]
@@ -75,16 +89,16 @@ Also needed to alter line in file to use fits file for psf:
 - The numbers 0 2480 are the objects we want to run over (to do a
   test, just change to e.g. 1 5 )
  
-
+>>> psfex
 ################## Getting psfex working to make .psf file for im3shape input
 
 --- Start by getting needed files locally:
 
- cp ~/imcat/sextfilesForDES/* .
+e.g. cp ~/imcat/sextfilesForDES/* .
 
- cp decam.sex psfex.sex
+Rename: cp decam.sex psfex.sex
 
---- Run the starpos.py code to put out the x,y of all stars
+--- Run the starpos_out.py code to put out the x,y of all stars
 
 --- Alter psfex.sex file thusly:
 
@@ -101,18 +115,31 @@ ASSOCSELEC_TYPE    MATCHED
 
 NUMBER_ASSOC  at the very end (so it doesn't output all columns, only needed ones)
 
+[ Have put these two altered files into the dir so they don't have to
+be rewritten each time, can just be copied into working cluster dir and run]
+
+
 --- Then run:
 
 sex -c psfex.sex im_p4_s4_1.fits  
 
   This will make: decamtemp.sexcat   
 
+############################## To run psfex at this point:
+
+  psfex decamtemp.sexcat   
+
+Which creates multiple output files, the most impt is:
+
+  decamtemp.psf
+
+############################## We can now run im3shape on this
+
+usingpsfex_exx.py
 
 ############################## Current:
 
 -- MSSG: to try to output the 4 params im3shape needs: fwhm, beta, x, y at the pos's of the galaxies, now that psfex  is working and making an interpl'd psf over the whole field from stars
-
-- Put files of first successful im3shape run in the repo
 
 - email to JoeZ about what's going on with the x and y posns
 
