@@ -135,21 +135,34 @@ Which creates multiple output files, the most impt is:
 
 ############################## We can now run im3shape on this
 
-usingpsfex_exx.py
+This is in: usingpsfex_exx.py, which outputs a star fits image at the location of the galaxy that you specify.
+
+(Can also show this star image, optionally)
+
+# Then to deconvolve
+
+python ../im3shape/bin/im3shape.py starfrompsfex.ini im_p4_s4_1.fits im_p4_s4_1.gal.simple.cat star_from_psfex.fits deconvln_via_psfex.txt 0 1
+
+-----> Current prob on ki-ls: it's complaining it can't now import
+       pyfits -- i'm sure this is a version clash issue of python, but
+       i can't seem to force im3shape.py to pick up the right version,
+       whatever i do...  [11/21/2013]
 
 ############################## Current:
 
--- MSSG: to try to output the 4 params im3shape needs: fwhm, beta, x, y at the pos's of the galaxies, now that psfex  is working and making an interpl'd psf over the whole field from stars
+-- MSSG: to try to output the 4 params im3shape needs: fwhm, beta, x,
+   y at the pos's of the galaxies, now that psfex is working and
+   making an interpl'd psf over the whole field from stars
 
-- email to JoeZ about what's going on with the x and y posns
+  - email to JoeZ about what's going on with the x and y posns
 
-- try to get Erin Sheldon psfex code from github running
+  - try to get Erin Sheldon psfex code from github running
 
 -- JCY: to check pos of stars from the im3shape output file, figure
    out if they are RA/DEC even though they say 20.xxxx, 20.xxxx
 
-- work with Daniel on photoz's of the Max8 cluster
+   - work with Daniel on photoz's of the Max8 cluster
 
 
 
-Next GH: Mon Nov 11, 12.30pm PST
+Next GH: Th Nov 22, 9am PST
