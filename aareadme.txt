@@ -6,9 +6,9 @@
 
 --------------- Contents:
 
-- git setup
-- single star im3shape run
-- psfex, then run im3shape 
+>>> git setup
+>>> single star im3shape run
+>>> psfex, then run im3shape 
 
 >>> git
 ###################################### To get git repo set up, and then use it
@@ -81,7 +81,7 @@ Also needed to alter line in file to use fits file for psf:
   cat, which was written out using choose_star.py (just: py
   choose_stars.py)
 
-  it's currently in the clusterStepData dir also.
+  It's currently in the clusterStepData dir also.
 
 
 - singlepsf_output.py.txt is the file we want to write to
@@ -97,8 +97,6 @@ Also needed to alter line in file to use fits file for psf:
 e.g. cp ~/imcat/sextfilesForDES/* .
 
 Rename: cp decam.sex psfex.sex
-
---- Run the starpos_out.py code to put out the x,y of all stars
 
 --- Alter psfex.sex file thusly:
 
@@ -125,6 +123,9 @@ sex -c psfex.sex im_p4_s4_1.fits
 
   This will make: decamtemp.sexcat   
 
+--- Run the starpos_out.py code to put out the x,y of all stars
+
+
 ############################## To run psfex at this point:
 
   psfex decamtemp.sexcat   
@@ -135,13 +136,14 @@ Which creates multiple output files, the most impt is:
 
 ############################## We can now run im3shape on this
 
-This is in: usingpsfex_exx.py, which outputs a star fits image at the location of the galaxy that you specify.
+This is in: usingpsfex_exx.py, which outputs a star fits image at the
+location of the galaxy that you specify.
 
 (Can also show this star image, optionally)
 
 # Then to deconvolve
 
-python ../im3shape/bin/im3shape.py starfrompsfex.ini im_p4_s4_1.fits im_p4_s4_1.gal.simple.cat star_from_psfex.fits deconvln_via_psfex.txt 0 1
+python ../../im3shape/bin/im3shape.py starfrompsfex.ini im_p4_s4_1.fits im_p4_s4_1.gal.simple.cat star_from_psfex.fits deconvln_via_psfex.txt 0 1
 
 -----> Current prob on ki-ls: it's complaining it can't now import
        pyfits -- i'm sure this is a version clash issue of python, but
@@ -165,4 +167,11 @@ python ../im3shape/bin/im3shape.py starfrompsfex.ini im_p4_s4_1.fits im_p4_s4_1.
 
 
 
+######################### Redd file made as so: (11-25-2013)
+ awk '{print $2 , $3, $4 , $5;}' singlepsf_output.py.txt > singlepsf_output.redd
+
+#############################################
+
 Next GH: Th Nov 22, 9am PST
+
+
