@@ -143,12 +143,13 @@ location of the galaxy that you specify.
 
 # Then to deconvolve
 
-python ../../im3shape/bin/im3shape.py starfrompsfex.ini im_p4_s4_1.fits im_p4_s4_1.gal.simple.cat star_from_psfex.fits deconvln_via_psfex.txt 0 1
+py ../../im3shape/bin/im3shape.py starfrompsfex.ini im_p4_s4_1.fits im_p4_s4_1.gal.simple.cat star_from_psfex.fits deconvln_via_psfex.txt 0 1
 
------> Current prob on ki-ls: it's complaining it can't now import
-       pyfits -- i'm sure this is a version clash issue of python, but
-       i can't seem to force im3shape.py to pick up the right version,
-       whatever i do...  [11/21/2013]
+-----> Note version prob on ki-ls: if i do python it uses
+/usr/local/bin/python which is the wrong one, and it will complain it
+can't import pyfits -- use py instion, which calls
+/afs/slac/g/ki/software/python/2.7.3/bin/python
+
 
 ############################## Current:
 
