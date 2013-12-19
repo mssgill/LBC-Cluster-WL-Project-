@@ -37,7 +37,7 @@ def getPSFExarray(psfex, x_image, y_image, nsidex=32, nsidey=32, upsampling=1, o
 
 ############################ Main code
 
-os.system('rm staratxy.fits')
+os.system('rm star_from_psfex.fits')
 
 # First gal -- obj #4
 x = 1448
@@ -47,14 +47,14 @@ psfex =  galsim.des.DES_PSFEx('decamtemp.psf')
 
 psfatgal = getPSFExarray(psfex, x, y )
 
-pyfits.writeto("star.fits",psfatgal)
+pyfits.writeto("star_from_psfex.fits",psfatgal)
 
 # f = pyfits.open("staratxy.fits")
 
 numpy.set_printoptions(threshold='nan')
 
-psfatgal
+psfatgal  # Display the contents of the fits table file
 
-pylab.imshow(psfatgal) ;  pylab.colorbar() ; pylab.show()
+# pylab.imshow(psfatgal) ;  pylab.colorbar() ; pylab.show()  # Show the star
 
-# run usingpsfex_exx.py
+

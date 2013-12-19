@@ -15,11 +15,11 @@ print np.average(dat[:,3]),np.average(dat[:,4])
 print len(dat[:,3])
 
 # Make the plot of where the objs are -- causing an illegal instruction on my Slac machine as of Nov 25,2013, but works fine locally on Ubuntu machine           
-fig = plt.figure()                                                                                   
-ax  = fig.add_subplot(111)
-ax.plot(dat[:,1],dat[:,2], '.')                                                                      
+#fig = plt.figure()                                                                                   
+#ax  = fig.add_subplot(111)
+#ax.plot(dat[:,1],dat[:,2], '.')                                                                      
 # ax.plot(dat[:,0],dat[:,1], '.')                                                                      
-plt.show()                                                                                           
+#plt.show()                                                                                           
 
 # Make a histo of e1                                                                                  
 plt.figure()
