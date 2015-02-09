@@ -35,6 +35,13 @@ for lix in range(0,lenp):
     xc[lix] = X[lix]
     yc[lix] = Y[lix]
     yerc[lix] = Yerr[lix]
+
+#######################################
+######## CREATE AVERAGE
+# BIN1
+    
+
+############################
     
 coeff, var_matrix = curve_fit(func,xc,yc, sigma = yerc)
 inv_variance = np.diagonal(linalg.inv(var_matrix))
@@ -57,11 +64,13 @@ print Chit, Chi
 fig = plt.figure()
 ax = fig.add_subplot(111)
 yplt = Y-X
+for  xix in range(0,len(Y)):
+    print Y[xix], X[xix], yplt[xix], xix
 print "Y = ", Y
 print "X = ", X
 
-plt.errorbar(X, yplt, yerr=Yerr, ls='None', marker='o', alpha=0.5, label='I3')
-plt.plot(xp, Y-yp, '--', label ='q,m,c fit')
+plt.errorbar(X, Y-X, yerr=Yerr, ls='None', marker='o', alpha=0.5, label='I3')
+#plt.plot(xp, yp-X, '+', linestyle='--', label ='q,m,c fit')
 #plt.plot(xplot,yplot,'k-')
 ax.set_xlabel('$\gamma_t$ ')
 ax.set_ylabel('$\gamma_m $')
