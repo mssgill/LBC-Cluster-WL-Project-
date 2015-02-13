@@ -76,17 +76,22 @@ print data[:,0]
 
 lenp = len(data[0,:])
 dxc = np.linspace(0,lenp-1,lenp)   
-dyc = func(xc,0.1, 1, 2*10**-6) 
-dyerc = func(xc,0.1, 1,2*10**-6)
+dyc = func(dxc,0.1, 1, 2*10**-6) 
+dyerc = func(dxc,0.1, 1,2*10**-6)
+
+#print dxc
+#print dyc
+#print dyerc
+
 for lix in range(0,lenp):
     dxc[lix] = data[0,lix]
     dyc[lix] = data[1,lix]
     dyerc[lix] = data[2,lix]
 ############################
     
-#dcoeff, dvar_matrix = curve_fit(func,dxc,dyc, sigma = dyerc)
-#dxp = dxc  
-#dyp = func(dxp,dcoeff[0], dcoeff[1], dcoeff[2])
+dcoeff, dvar_matrix = curve_fit(func,dxc,dyc, sigma = dyerc)
+dxp = dxc  
+dyp = func(dxp,dcoeff[0], dcoeff[1], dcoeff[2])
 #Chit = 0
 #for cix in range(0,lenp):
 #    Chit +=  ((data[1,lix]-dyp[cix])/data[2,lix])**2
@@ -99,7 +104,7 @@ ax = fig.add_subplot(111)
 yplt = Y-X
 
 plt.errorbar(X, Y-X, yerr=Yerr, ls='None', marker='o', alpha=0.05, label='all pts')
-#plt.plot(xp, yp-X, '+', linestyle='--', label ='q,m,c fit')
+plt.plot(dxp, dyp-dxp, '+', linestyle='--', label ='q,m,c fit')
 plt.errorbar(data[0,:], data[1,:]-data[0,:], yerr=data[2,:], ls='None', lw=5, marker='*', alpha=0.75, label='avrg')
 ax.set_xlabel('$\gamma_m $-$\gamma_t$ ')
 ax.set_ylabel('$\gamma_m $')
