@@ -12,20 +12,26 @@ import numpy as np
 import scipy
 import random
 
+################### SETUP FUNCTIONS
+##############
 def func(x,a,b,c):
     return a*x**2 +b*x + c #Refer [1]
 
 def funclin(x,b,c):
     return b*x + c #Refer [1]
 
-#j_file = 'dadimc.txt'
+#############        READ IN FILES
+################
 files = ['fitDEIMOS.txt','fitFDNTnew.txt', 'fitimc.txt', 'fitESHELc.txt', 'fitim3shapef.txt', 'fitMJn.txt', 'fitPSFexg.txt'] 
-j_file = files[3]
+j_file = files[0]
 t_data = np.genfromtxt(j_file)
 X = t_data[:,0]
 Y = t_data[:,1]
 Yerr = t_data[:,2]
 
+
+#############       FILL ARRAYS
+###################
 lenp = len(X)
 xc = np.linspace(0,lenp-1,lenp)   
 yc = func(xc,0.1, 1, 2*10**-6) 
@@ -36,7 +42,7 @@ for lix in range(0,lenp):
     yerc[lix] = Yerr[lix]
 
 #######################################
-######## CREATE AVERAGE
+######## CREATE BINS AND AVERAGE
 # BIN1
 bin1 = X == 0.0
 bin2 = X == 0.03
@@ -44,9 +50,6 @@ bin3 = X == 0.06
 bin4 = X == 0.09
 bin5 = X == 0.15
 
-#print 'Bin 1'
-#print X[bin1]
-#print Y[bin1]
 data = np.zeros((4,5))
 data[0,0] = np.average(X[bin1])
 data[1,0] = np.average(Y[bin1])
@@ -73,33 +76,35 @@ data[1,4] = np.average(Y[bin5])
 data[2,4] = np.std(Y[bin5])
 data[3,4] = np.average(Yerr[bin5])
 
-print data[:,0]
-
 lenp = len(data[0,:])
 dxc = np.linspace(0,lenp-1,lenp)   
 dyc = func(dxc,0.1, 1, 2*10**-6) 
 dyerc = func(dxc,0.1, 1,2*10**-6)
 
-#print dxc
-#print dyc
-#print dyerc
-
 for lix in range(0,lenp):
     dxc[lix] = data[0,lix]
     dyc[lix] = data[1,lix]
     dyerc[lix] = data[2,lix]
-############################
+
+
+###################    PERFORM FITS
+##############################
     
-dcoeff, dvar_matrix = curve_fit(func,dxc,dyc, sigma = dyerc)
+qmc_coeff, dvar_matrix = curve_fit(func,dxc,dyc, sigma = dyerc)
+mc_coeff, dvar_matrix = curve_fit(funclin,dxc,dyc, sigma = dyerc)
+aqmc_coeff, dvar_matrix = curve_fit(func,xc,yc, sigma = yerc)
+amc_coeff, dvar_matrix = curve_fit(funclin,xc,yc, sigma = yerc)
+
 dxp = dxc  
-dyp = func(dxp,dcoeff[0], dcoeff[1], dcoeff[2])
-#Chit = 0
-#for cix in range(0,lenp):
-#    Chit +=  ((data[1,lix]-dyp[cix])/data[2,lix])**2
-#    Chi = Chit/(lenp-3.0-1.0)
-#print Chit, Chi
+dyp = func(dxp,qmc_coeff[0], qmc_coeff[1], qmc_coeff[2])
 
+print 'Fit qmc params', qmc_coeff
+print 'Fit mc params', mc_coeff
+print 'Fit params', aqmc_coeff
+print 'Fit params', amc_coeff
 
+############## MAKE PLOTS
+############
 fig = plt.figure()
 ax = fig.add_subplot(111)
 yplt = Y-X
