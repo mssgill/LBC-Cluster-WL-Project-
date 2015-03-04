@@ -23,7 +23,9 @@ def funclin(x,b,c):
 #############        READ IN FILES
 ################
 files = ['fitDEIMOS.txt','fitFDNTnew.txt', 'fitimc.txt', 'fitESHELc.txt', 'fitim3shapef.txt', 'fitMJn.txt', 'fitPSFexg.txt'] 
+
 j_file = files[0]
+
 t_data = np.genfromtxt(j_file)
 X = t_data[:,0]
 Y = t_data[:,1]

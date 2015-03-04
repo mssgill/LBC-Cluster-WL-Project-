@@ -1,3 +1,5 @@
+# Mar 2015
+
 import sys
 import os
 import subprocess
@@ -14,47 +16,56 @@ import random
 
 ################### SETUP FUNCTIONS
 ##############
-def func(x,a,b,c):
+def parab(x,a,b,c):
     return a*x**2 +b*x + c #Refer [1]
 
-def funclin(x,b,c):
+def linefunc(x,b,c):
     return b*x + c #Refer [1]
 
 #############        READ IN FILES
 ################
 files = ['fitDEIMOS.txt','fitFDNTnew.txt', 'fitimc.txt', 'fitESHELc.txt', 'fitim3shapef.txt', 'fitMJn.txt', 'fitPSFexg.txt'] 
-j_file = files[0]
-t_data = np.genfromtxt(j_file)
-X = t_data[:,0]
-Y = t_data[:,1]
-Yerr = t_data[:,2]
+j_file = files[0]               # Pick which file to run from list above
+t_data = np.genfromtxt(j_file)  # Read in the data
+X = t_data[:,0]                 # Column 1 are the x values
+Y = t_data[:,1]                 # Column 2 are the y values
+Yerr = t_data[:,2]              # Column 3 are the y error vals 
 
 
 #############       FILL ARRAYS
 ###################
 lenp = len(X)
-xc = np.linspace(0,lenp-1,lenp)   
-yc = func(xc,0.1, 1, 2*10**-6) 
-yerc = func(xc,0.1, 1,2*10**-6)
-for lix in range(0,lenp):
+print " lenp = " , lenp           # 96 for these data files
+xc = np.linspace(0,lenp-1,lenp)   # Make vec from 0 to lenp-1, with lenp steps (so it will be an exact integer array in the 0 -> lenp-1 range) 
+yc = parab(xc, 0.1, 1, 2*10**-6)   # Eval the parabola function with the xc vec values and the qmc values as given 
+yerc = parab(xc,0.1, 1,2*10**-6)
+
+for lix in range(0,lenp):          # Replace the values in the vecs by the ones read in
     xc[lix] = X[lix]
     yc[lix] = Y[lix]
     yerc[lix] = Yerr[lix]
 
+    
 #######################################
 ######## CREATE BINS AND AVERAGE
-# BIN1
-bin1 = X == 0.0
+# BIN1 
+bin1 = X == 0.0    # Boolean arrays, which puts True in all the places of the array that obeys the test condition
 bin2 = X == 0.03
 bin3 = X == 0.06
 bin4 = X == 0.09
 bin5 = X == 0.15
 
-data = np.zeros((4,5))
+data = np.zeros((4,5))           # Create a 4x5 array of zeroes (4 rows, 5 cols)
 data[0,0] = np.average(X[bin1])
 data[1,0] = np.average(Y[bin1])
 data[2,0] = np.std(Y[bin1])
 data[3,0] = np.average(Yerr[bin1])
+
+#print X[bin1]
+#print data
+#sys.exit()
+
+
 
 data[0,1] = np.average(X[bin2])
 data[1,1] = np.average(Y[bin2])
@@ -78,8 +89,8 @@ data[3,4] = np.average(Yerr[bin5])
 
 lenp = len(data[0,:])
 dxc = np.linspace(0,lenp-1,lenp)   
-dyc = func(dxc,0.1, 1, 2*10**-6) 
-dyerc = func(dxc,0.1, 1,2*10**-6)
+dyc = parab(dxc,0.1, 1, 2*10**-6) 
+dyerc = parab(dxc,0.1, 1,2*10**-6)
 
 for lix in range(0,lenp):
     dxc[lix] = data[0,lix]
@@ -91,17 +102,17 @@ for lix in range(0,lenp):
 ###################    PERFORM FITS
 ##############################
     
-qmc_coeff, dvar_matrix = curve_fit(func,dxc,dyc, sigma = dyerc)
-mc_coeff, dvar_matrix = curve_fit(funclin,dxc,dyc, sigma = dyerc)
-aqmc_coeff, dvar_matrix = curve_fit(func,xc,yc, sigma = yerc)
-amc_coeff, dvar_matrix = curve_fit(funclin,xc,yc, sigma = yerc)
+qmc_coeff, dvar_matrix = curve_fit(parab,dxc,dyc, sigma = dyerc)
+mc_coeff, dvar_matrix = curve_fit(linefunc,dxc,dyc, sigma = dyerc)
+aqmc_coeff, dvar_matrix = curve_fit(parab,xc,yc, sigma = yerc)
+amc_coeff, dvar_matrix = curve_fit(linefunc,xc,yc, sigma = yerc)
 
 ################### CREATE FUNCT FROM FITS
 dxp = dxc  
-y_1 = func(dxp,qmc_coeff[0], qmc_coeff[1], qmc_coeff[2])
+y_1 = parab(dxp,qmc_coeff[0], qmc_coeff[1], qmc_coeff[2])
 
 dxp = dxc  
-y_2 = funclin(dxp,mc_coeff[0], mc_coeff[1])
+y_2 = linefunc(dxp,mc_coeff[0], mc_coeff[1])
 
 print y_1
 print y_2
@@ -130,7 +141,7 @@ print Chi
 #################
 
 dxp = dxc  
-dyp = func(dxp,qmc_coeff[0], qmc_coeff[1], qmc_coeff[2])
+dyp = parab(dxp,qmc_coeff[0], qmc_coeff[1], qmc_coeff[2])
 
 print 'Fit qmc params', qmc_coeff
 print 'Fit mc params', mc_coeff
