@@ -38,7 +38,7 @@ lenp = len(X)
 print " lenp = " , lenp           # 96 for these data files
 xc = np.linspace(0,lenp-1,lenp)   # Make vec from 0 to lenp-1, with lenp steps (so it will be an exact integer array in the 0 -> lenp-1 range) 
 yc = parab(xc, 0.1, 1, 2*10**-6)   # Eval the parabola function with the xc vec values and the qmc values as given 
-yerc = parab(xc,0.1, 1,2*10**-6)
+yerc = parab(xc,0.1, 1,2*10**-6)   # Doing this just to fill arrays with dummy vals to be overwritten later
 
 for lix in range(0,lenp):          # Replace the values in the vecs by the ones read in
     xc[lix] = X[lix]
@@ -56,18 +56,12 @@ bin4 = X == 0.09
 bin5 = X == 0.15
 
 data = np.zeros((4,5))           # Create a 4x5 array of zeroes (4 rows, 5 cols)
-data[0,0] = np.average(X[bin1])
-data[1,0] = np.average(Y[bin1])
-data[2,0] = np.std(Y[bin1])
-data[3,0] = np.average(Yerr[bin1])
+data[0,0] = np.average(X[bin1])  # Assign avg of X values that are 0 into 0,0 elt of data array
+data[1,0] = np.average(Y[bin1])  # Assign avg of Y values where X = 0 into 1,0 elt of data array
+data[2,0] = np.std(Y[bin1])      # Assign std of Y values where X = 0 into 2,0 elt of data array
+data[3,0] = np.average(Yerr[bin1])  # Assign avg of Y err values where X = 0 into 3,0 elt of data array
 
-#print X[bin1]
-#print data
-#sys.exit()
-
-
-
-data[0,1] = np.average(X[bin2])
+data[0,1] = np.average(X[bin2])  # Similar to above, for other X vals
 data[1,1] = np.average(Y[bin2])
 data[2,1] = np.std(Y[bin2])
 data[3,1] = np.average(Yerr[bin2])
@@ -93,26 +87,27 @@ dyc = parab(dxc,0.1, 1, 2*10**-6)
 dyerc = parab(dxc,0.1, 1,2*10**-6)
 
 for lix in range(0,lenp):
-    dxc[lix] = data[0,lix]
-    dyc[lix] = data[1,lix]
-    dyerc[lix] = data[2,lix]
+    dxc[lix] = data[0,lix]    # Fill avgs of X for dif x vals into this vector
+    dyc[lix] = data[1,lix]    # Fill avgs of Y for dif x vals into this vector
+    dyerc[lix] = data[2,lix]    # Fill avgs of std of Y for dif x vals into this vector
 
 
 
 ###################    PERFORM FITS
 ##############################
     
-qmc_coeff, dvar_matrix = curve_fit(parab,dxc,dyc, sigma = dyerc)
-mc_coeff, dvar_matrix = curve_fit(linefunc,dxc,dyc, sigma = dyerc)
+qmc_coeff, dvar_matrix = curve_fit(parab,dxc,dyc, sigma = dyerc)   # parabolic fit
+mc_coeff, dvar_matrix = curve_fit(linefunc,dxc,dyc, sigma = dyerc) # lin fit
+
 aqmc_coeff, dvar_matrix = curve_fit(parab,xc,yc, sigma = yerc)
 amc_coeff, dvar_matrix = curve_fit(linefunc,xc,yc, sigma = yerc)
 
 ################### CREATE FUNCT FROM FITS
-dxp = dxc  
-y_1 = parab(dxp,qmc_coeff[0], qmc_coeff[1], qmc_coeff[2])
+dxp = dxc   # Five x input vals
+y_1 = parab(dxp,qmc_coeff[0], qmc_coeff[1], qmc_coeff[2])  # Parabolic curve with params extracted from fit
 
 dxp = dxc  
-y_2 = linefunc(dxp,mc_coeff[0], mc_coeff[1])
+y_2 = linefunc(dxp,mc_coeff[0], mc_coeff[1])    # Line with params extracted from fit
 
 print y_1
 print y_2
@@ -132,12 +127,6 @@ print Chi
 
 
 
-    
-
-
-
-
-
 #################
 
 dxp = dxc  
@@ -154,7 +143,7 @@ fig = plt.figure()
 ax = fig.add_subplot(111)
 yplt = Y-X
 
-plt.errorbar(X, Y-X, yerr=Yerr, ls='None', marker='o', alpha=0.05, label='all pts')
+#plt.errorbar(X, Y-X, yerr=Yerr, ls='None', marker='o', alpha=0.05, label='all pts')
 plt.plot(dxp, dyp-dxp, '+', linestyle='--', label ='q,m,c fit')
 plt.errorbar(data[0,:], data[1,:]-data[0,:], yerr=data[2,:], ls='None', lw=5, marker='*', alpha=0.75, label='avrg')
 ax.set_xlabel('$\gamma_m $-$\gamma_t$ ')
